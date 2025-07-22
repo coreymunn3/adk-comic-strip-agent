@@ -2,6 +2,29 @@
 
 This project showcases a sophisticated agent designed to automatically generate a 4-panel comic strip from a user-provided historical event. The agent is orchestrated as a sequence of specialized sub-agents, each performing a specific task in the comic creation pipeline.
 
+## Setup
+
+To run this project, you need to set up your environment variables. Create a `.env` file in the root of the project and add the following:
+
+```bash
+GOOGLE_CLOUD_PROJECT="agent-idk-test"
+GOOGLE_CLOUD_LOCATION="us-central1"
+GOOGLE_GENAI_USE_VERTEXAI="True"
+GOOGLE_API_KEY="YOUR_API_KEY"
+```
+
+After setting up the environment variables, install the dependencies using Poetry:
+
+```bash
+poetry install
+```
+
+Then, you can run the web client:
+
+```bash
+poetry run adk web
+```
+
 ## Orchestration
 
 The `comic_strip_generator_agent` is a `SequentialAgent` that orchestrates the entire workflow. It executes the following sub-agents in order:
@@ -44,3 +67,8 @@ The `comic_strip_generator_agent` is a `SequentialAgent` that orchestrates the e
 ## Other Agents
 
 This project also includes a simple `test_agent` that can provide the time and weather for New York. It serves as a basic example of an agent.
+
+## Continue Learning
+
+While developing I found this [masterclass](https://www.youtube.com/watch?v=P4VFL9nIaIA) by a youtube channel called aiwithbrandon to be very helpful and informative,
+and includes more instructions about setting up your environment and google account for api billing, which some may require.
