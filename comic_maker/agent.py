@@ -156,7 +156,7 @@ image_prompt_refiner_agent = LlmAgent(
 
 image_prompt_refinement_agent = LoopAgent(
     name="ImagePromptEvaluationLoop",
-    max_iterations=5,
+    max_iterations=3,
     sub_agents=[
         image_prompt_evaluation_agent,
         image_prompt_refiner_agent,
