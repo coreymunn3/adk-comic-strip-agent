@@ -1,0 +1,46 @@
+# Comic Maker Agent
+
+This project showcases a sophisticated agent designed to automatically generate a 4-panel comic strip from a user-provided historical event. The agent is orchestrated as a sequence of specialized sub-agents, each performing a specific task in the comic creation pipeline.
+
+## Orchestration
+
+The `comic_strip_generator_agent` is a `SequentialAgent` that orchestrates the entire workflow. It executes the following sub-agents in order:
+
+1.  **`research_agent`**: Researches the historical event.
+2.  **`storyboard_agent`**: Creates a storyboard from the research.
+3.  **`image_prompt_generation_agent`**: Generates a detailed image prompt.
+4.  **`image_prompt_refinement_agent`**: A loop that refines the image prompt.
+5.  **`image_generation_agent`**: Generates the final comic strip image.
+
+## Sub-Agents
+
+### 1. Research Agent (`research_agent`)
+
+- **Purpose:** To gather factual information about a given historical event.
+- **Functionality:** Uses Google Search to find a chronological timeline, key figures, significant locations, and the outcome of the event. It then synthesizes this information into a concise summary.
+
+### 2. Storyboard Agent (`storyboard_agent`)
+
+- **Purpose:** To break down the historical event into a visual narrative.
+- **Functionality:** Takes the research summary and divides it into four distinct, sequential story segments, each suitable for a single comic panel.
+
+### 3. Image Prompt Generation Agent (`image_prompt_generation_agent`)
+
+- **Purpose:** To create a detailed, effective prompt for the AI image generator.
+- **Functionality:** Converts the four storyboard segments into a single, consolidated prompt. This prompt specifies a 2x2 grid layout and provides detailed descriptions for each panel, including the environment, subjects, and action.
+
+### 4. Image Prompt Refinement Agent (`image_prompt_refinement_agent`)
+
+- **Purpose:** To ensure the generated comic strip is visually diverse and narratively compelling.
+- **Functionality:** This is a `LoopAgent` that iteratively refines the image prompt. It consists of two sub-agents:
+  - **`image_prompt_evaluation_agent`**: Evaluates the prompt to ensure that the panels are sufficiently different in terms of their subjects and actions.
+  - **`image_prompt_refiner_agent`**: If the evaluation fails, this agent refines the prompt based on the critique provided by the evaluation agent. The loop continues until the prompt passes the evaluation or the maximum number of iterations is reached.
+
+### 5. Image Generation Agent (`image_generation_agent`)
+
+- **Purpose:** To generate the final comic strip.
+- **Functionality:** Calls the `generate_comic_strip_tool` with the refined, consolidated prompt to create the 4-panel comic strip image.
+
+## Other Agents
+
+This project also includes a simple `test_agent` that can provide the time and weather for New York. It serves as a basic example of an agent.
