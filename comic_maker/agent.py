@@ -3,7 +3,7 @@ from google.adk.agents import LlmAgent, SequentialAgent, Agent, LoopAgent
 from google.adk.tools import google_search
 from google.adk.sessions import InMemorySessionService
 from pydantic import BaseModel, Field
-from comic_maker.tools import generate_comic_strip_tool, exit_loop
+from comic_maker.tools import generate_comic_strip_tool, exit_loop, stop_execution
 
 FLASH_MODEL = 'gemini-2.5-flash'
 PRO_MODEL='gemini-2.5-pro'
@@ -31,7 +31,19 @@ research_agent = LlmAgent(
     If no relevant information is found, set 'research_summary' to "NO_INFO_FOUND".
     """,
   tools=[google_search],
-  output_key='research_summary'
+    output_key='research_summary'
+)
+
+#  GATE Research Agent
+research_gate_agent = LlmAgent(
+    model=FLASH_MODEL,
+    name='ResearchGateAgent',
+    instruction="""
+    You are a gatekeeper. Your task is to check the 'research_summary' field in the state.
+    If the 'research_summary' is "NO_INFO_FOUND", you MUST call the 'stop_execution' tool.
+    Otherwise, do nothing.
+    """,
+    tools=[stop_execution],
 )
 
 # 📝 Storyboard Agent
@@ -172,6 +184,7 @@ comic_strip_generator_agent = SequentialAgent(
     description="Generates a historical summary and a 4-panel comic strip.",
     sub_agents=[
         research_agent,
+        research_gate_agent,
         storyboard_agent,
         image_prompt_generation_agent,
         image_prompt_refinement_agent,

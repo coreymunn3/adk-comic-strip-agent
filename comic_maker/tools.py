@@ -12,6 +12,12 @@ def exit_loop(tool_context: ToolContext):
     tool_context.actions.escalate = True
     return {}
 
+def stop_execution(tool_context: ToolContext):
+    """Call this function to stop the execution of the agent."""
+    print(f"  [Tool Call] stop_execution triggered by {tool_context.agent_name}")
+    tool_context.actions.terminate = True
+    return {}
+
 async def generate_comic_strip_tool(prompt: str, tool_context: ToolContext):
     """
     Generates a comic strip based on the provided prompt.
